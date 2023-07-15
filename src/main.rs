@@ -1,7 +1,8 @@
 #![allow(dead_code, unused_variables)]
 
-use polars::prelude::*;
 use std::env;
+
+use polars::prelude::*;
 
 use crate::io_util::*;
 
@@ -70,7 +71,7 @@ fn main() {
         .drop_columns(["M32"])
         // 过滤
         .filter((col("D12").eq(lit(1))).and(col("F11").is_not_null()))
-        .sort_by_exprs([col("D11"), col("D12")], [false, false], false)
+        .sort_by_exprs([col("D11"), col("D12")], [false, false], false, true)
         .with_streaming(true)
         .collect()
         .unwrap();
