@@ -4,10 +4,11 @@ use std::path::PathBuf;
 use crate::dataset_util::schemas;
 
 pub(crate) fn read_csv(path: &str) -> DataFrame {
+    let schema=SchemaRef::from(schemas());
     CsvReader::from_path(path)
         .unwrap()
         .has_header(false)
-        .with_schema(SchemaRef::from(schemas()))
+        .with_schema(Some(schema))
         .finish()
         .unwrap()
 }
@@ -15,7 +16,7 @@ pub(crate) fn read_csv(path: &str) -> DataFrame {
 pub(crate) fn read_csv_lazy(path: &str) -> LazyFrame {
     LazyCsvReader::new(path)
         .has_header(false)
-        .with_schema(SchemaRef::from(schemas()))
+        .with_schema(Some(SchemaRef::from(schemas())))
         .finish()
         .unwrap()
 }
