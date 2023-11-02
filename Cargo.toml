@@ -12,4 +12,4 @@ polars = { git = "https://github.com/pola-rs/polars", branch = "main", features 
 [profile.release]
 lto = true
 strip = true
-opt-level = "z"
+codegen-units = 1
