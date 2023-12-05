@@ -29,5 +29,5 @@ pub fn schemas() -> Schema {
         schema.push(f);
     }
 
-    Schema::from_iter(schema.into_iter())
+    Schema::from_iter(schema)
 }
