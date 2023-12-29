@@ -11,10 +11,10 @@ const HEADERS: [&str; 70] = [
 
 pub fn schemas() -> Schema {
     let mut schema = vec![
-        Field::new("ID1", DataType::Utf8),
-        Field::new("ID2", DataType::Utf8),
+        Field::new("ID1", DataType::String),
+        Field::new("ID2", DataType::String),
         Field::new("T1", DataType::Int32),
-        Field::new("IND", DataType::Utf8),
+        Field::new("IND", DataType::String),
         Field::new("PRO", DataType::Int32),
         Field::new("DJJG", DataType::Int32),
         Field::new("XZQH", DataType::Int32),

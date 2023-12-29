@@ -90,7 +90,9 @@ fn main() {
     let s_cut = cut(&s, c, None, false, false).unwrap();
     println!("{:?}", s_cut);
 
-    println!("{:?}", df.select(["R1", "R11", "xxx"]).unwrap().mean());
+    // removed by https://github.com/pola-rs/polars/commit/b1a2ea37bbc8d14ca034e299d5aafc2644455ff4#diff-21c8ad8c89a12c527c0a8a3311685db4db9a12ab4d4da175d02c10303253278d
+    // file: crates/polars-core/src/frame/mod.rs
+    //println!("{:?}", df.select(["R1", "R11", "xxx"]).unwrap().mean());
 
     let df1 = df.select(["ID1", "R1", "M11", "R11", "xxx"]).unwrap();
     println!("{:?}", df1.head(Some(5)));
@@ -115,7 +117,7 @@ fn main() {
 
 fn str_to_len(str_val: &Series) -> Series {
     str_val
-        .utf8()
+        .str()
         .unwrap()
         .into_iter()
         .map(|opt_name: Option<&str>| opt_name.map(|x| x.len() as u32))

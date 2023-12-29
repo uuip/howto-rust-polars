@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 polars = { git = "https://github.com/pola-rs/polars", branch = "main", features = [
-    "parquet", "lazy", "is_in", "rank", "abs", "streaming", "algo", "cutqcut", "propagate_nans", "dtype-full", "random"] }
+    "parquet", "lazy", "is_in", "rank", "abs", "streaming", "cutqcut", "propagate_nans", "dtype-full", "random"] }
 
 [profile.release]
 lto = true
