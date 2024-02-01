@@ -68,9 +68,9 @@ fn main() {
                 .alias("R1"),
         ])
         // 删除列
-        .drop_columns(["M32"])
+        .drop(["M32"])
         // 过滤
-        .filter((col("D12").eq(lit(1))).and(col("F11").is_not_null()))
+        .filter(col("D12").eq(lit(1)).and(col("F11").is_not_null()))
         .sort_by_exprs([col("D11"), col("D12")], [false, false], false, true)
         .with_streaming(true)
         .collect()
