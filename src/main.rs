@@ -72,6 +72,7 @@ fn main() {
         // 过滤
         .filter(col("D12").eq(lit(1)).and(col("F11").is_not_null()))
         .sort_by_exprs([col("D11"), col("D12")], SortMultipleOptions::new())
+        .unwrap()
         .with_streaming(true)
         .collect()
         .unwrap();
