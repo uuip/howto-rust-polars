@@ -13,7 +13,7 @@ fn main() {
     env::set_var("POLARS_FMT_MAX_ROWS", "10");
     env::set_var("POLARS_FMT_MAX_COLS", "20");
     let o = GetOutput::from_type(DataType::Int32);
-    let incl = Series::from_vec("", vec![0.0_f32]);
+    let incl = Series::from_vec("".into(), vec![0.0_f32]);
     let c = vec![1.0_f64, 2.0];
     let path = r"50w_2022.csv";
     // let df: DataFrame = read_csv(path);

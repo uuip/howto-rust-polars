@@ -13,3 +13,5 @@ polars = { git = "https://github.com/pola-rs/polars", branch = "main", features 
 lto = true
 strip = true
 codegen-units = 1
+panic = "abort"
+opt-level = 3
