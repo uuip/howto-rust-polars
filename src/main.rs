@@ -38,7 +38,7 @@ fn main() {
     let mut df = df
         .lazy()
         .with_columns([
-            col("ID1").map(|x| Ok(Some(str_to_len(&x))), o).alias("xxx"),
+            col("ID1").map(|x| Ok(Some(str_to_len(x))), o).alias("xxx"),
             //添加列，值为100
             lit(100).alias("yyy"),
             //从一列赋值
@@ -72,13 +72,12 @@ fn main() {
         // 过滤
         .filter(col("D12").eq(lit(1)).and(col("F11").is_not_null()))
         .sort_by_exprs([col("D11"), col("D12")], SortMultipleOptions::new())
-        .unwrap()
         .with_streaming(true)
         .collect()
         .unwrap();
     println!("{:#?}", df);
 
-    let r11_rank = df.column("R11").unwrap().rank(
+    let r11_rank = df.column("R11").unwrap().as_materialized_series().rank(
         RankOptions {
             method: RankMethod::Ordinal,
             descending: false,
@@ -88,7 +87,7 @@ fn main() {
     println!("{:?}", r11_rank);
 
     let s = df.column("R11").unwrap().cast(&DataType::Float64).unwrap();
-    let s_cut = cut(&s, c, None, false, false).unwrap();
+    let s_cut = cut(s.as_materialized_series(), c, None, false, false).unwrap();
     println!("{:?}", s_cut);
 
     // removed by https://github.com/pola-rs/polars/commit/b1a2ea37bbc8d14ca034e299d5aafc2644455ff4#diff-21c8ad8c89a12c527c0a8a3311685db4db9a12ab4d4da175d02c10303253278d
@@ -116,12 +115,12 @@ fn main() {
     // let _ = read_parquet_lazy("data.pq");
 }
 
-fn str_to_len(str_val: &Series) -> Series {
+fn str_to_len(str_val: Column) -> Column {
     str_val
         .str()
         .unwrap()
         .into_iter()
         .map(|opt_name: Option<&str>| opt_name.map(|x| x.len() as u32))
         .collect::<UInt32Chunked>()
-        .into_series()
+        .into_column()
 }
