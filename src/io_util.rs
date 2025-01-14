@@ -43,5 +43,5 @@ pub(crate) fn write_parquet(df: &mut DataFrame, path: &str) {
 pub(crate) fn write_parquet_streaming(df: LazyFrame, path: &str) {
     let path = PathBuf::from(path);
     let options = ParquetWriteOptions::default();
-    df.sink_parquet(path, options).unwrap()
+    df.sink_parquet(&path, options, None).unwrap()
 }

@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-polars = { git = "https://github.com/pola-rs/polars", branch = "main", features = [
+polars = { version = "0.45.1", features = [
     "parquet", "lazy", "is_in", "rank", "abs", "streaming", "cutqcut", "propagate_nans", "dtype-full", "random"] }
 
 [profile.release]
