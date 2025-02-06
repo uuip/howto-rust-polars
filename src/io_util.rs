@@ -4,18 +4,19 @@ use std::path::PathBuf;
 use crate::dataset_util::schemas;
 
 pub(crate) fn read_csv(path: &str) -> DataFrame {
-    let schema=SchemaRef::from(schemas());
-    CsvReader::from_path(path)
-        .unwrap()
-        .has_header(false)
+    let schema = SchemaRef::from(schemas());
+    CsvReadOptions::default()
+        .with_has_header(false)
         .with_schema(Some(schema))
+        .try_into_reader_with_file_path(Some(path.into()))
+        .unwrap()
         .finish()
         .unwrap()
 }
 
 pub(crate) fn read_csv_lazy(path: &str) -> LazyFrame {
     LazyCsvReader::new(path)
-        .has_header(false)
+        .with_has_header(false)
         .with_schema(Some(SchemaRef::from(schemas())))
         .finish()
         .unwrap()
@@ -42,5 +43,5 @@ pub(crate) fn write_parquet(df: &mut DataFrame, path: &str) {
 pub(crate) fn write_parquet_streaming(df: LazyFrame, path: &str) {
     let path = PathBuf::from(path);
     let options = ParquetWriteOptions::default();
-    df.sink_parquet(path, options).unwrap()
+    df.sink_parquet(&path, options, None).unwrap()
 }
