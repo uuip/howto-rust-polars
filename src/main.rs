@@ -58,7 +58,7 @@ fn main() {
                 col("M51")
                     .is_null()
                     .or(col("M11").is_infinite())
-                    .or(col("M11").is_in(lit(incl))),
+                    .or(col("M11").is_in(lit(incl), /* bool */true)),
             )
             .then(lit(1000.0_f32))
             .otherwise(col("M11"))
