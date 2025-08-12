@@ -68,11 +68,11 @@ fn main() {
                 .alias("R1"),
         ])
         // 删除列
-        .drop(["M32"])
+        .drop(Selector::ByName { names: Arc::new([PlSmallStr::from("M32")]), strict: false })
         // 过滤
         .filter(col("D12").eq(lit(1)).and(col("F11").is_not_null()))
         .sort_by_exprs([col("D11"), col("D12")], SortMultipleOptions::new())
-        .with_streaming(true)
+        .with_new_streaming(true)
         .collect()
         .unwrap();
     println!("{:#?}", df);
