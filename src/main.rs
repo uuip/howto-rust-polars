@@ -12,7 +12,7 @@ mod io_util;
 fn main() {
     env::set_var("POLARS_FMT_MAX_ROWS", "10");
     env::set_var("POLARS_FMT_MAX_COLS", "20");
-    let o = GetOutput::from_type(DataType::Int32);
+    let o = |_: &Schema, f: &Field| Ok(Field::new(f.name.clone(), DataType::UInt32));
     let incl = Series::from_vec("".into(), vec![0.0_f32]);
     let c = vec![1.0_f64, 2.0];
     let path = r"50w_2022.csv";
@@ -38,7 +38,7 @@ fn main() {
     let mut df = df
         .lazy()
         .with_columns([
-            col("ID1").map(|x| Ok(Some(str_to_len(x))), o).alias("xxx"),
+            col("ID1").map(|x| Ok(str_to_len(x)), o).alias("xxx"),
             //添加列，值为100
             lit(100).alias("yyy"),
             //从一列赋值
