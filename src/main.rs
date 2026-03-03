@@ -58,7 +58,7 @@ fn main() {
                 col("M51")
                     .is_null()
                     .or(col("M11").is_infinite())
-                    .or(col("M11").is_in(lit(incl), /* bool */true)),
+                    .or(col("M11").is_in(lit(incl), /* bool */ true)),
             )
             .then(lit(1000.0_f32))
             .otherwise(col("M11"))
@@ -68,7 +68,10 @@ fn main() {
                 .alias("R1"),
         ])
         // 删除列
-        .drop(Selector::ByName { names: Arc::new([PlSmallStr::from("M32")]), strict: false })
+        .drop(Selector::ByName {
+            names: Arc::new([PlSmallStr::from("M32")]),
+            strict: false,
+        })
         // 过滤
         .filter(col("D12").eq(lit(1)).and(col("F11").is_not_null()))
         .sort_by_exprs([col("D11"), col("D12")], SortMultipleOptions::new())

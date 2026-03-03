@@ -1,6 +1,6 @@
-use polars::prelude::*;
-
 use crate::dataset_util::schemas;
+use polars::prelude::sync_on_close::SyncOnCloseType;
+use polars::prelude::*;
 
 pub(crate) fn read_csv(path: &str) -> DataFrame {
     let schema = SchemaRef::from(schemas());
@@ -14,7 +14,7 @@ pub(crate) fn read_csv(path: &str) -> DataFrame {
 }
 
 pub(crate) fn read_csv_lazy(path: &str) -> LazyFrame {
-    LazyCsvReader::new(PlPath::new(path))
+    LazyCsvReader::new(PlRefPath::new(path))
         .with_has_header(false)
         .with_schema(Some(SchemaRef::from(schemas())))
         .finish()
@@ -28,7 +28,7 @@ pub(crate) fn read_parquet(path: &str) -> DataFrame {
 
 pub(crate) fn read_parquet_lazy(path: &str) -> LazyFrame {
     let args = ScanArgsParquet::default();
-    LazyFrame::scan_parquet(PlPath::new(path), args).unwrap()
+    LazyFrame::scan_parquet(PlRefPath::new(path), args).unwrap()
 }
 
 pub(crate) fn write_parquet(df: &mut DataFrame, path: &str) {
@@ -40,7 +40,21 @@ pub(crate) fn write_parquet(df: &mut DataFrame, path: &str) {
 }
 
 pub(crate) fn write_parquet_streaming(df: LazyFrame, path: &str) {
-    let path = PlPath::new(path);
+    let path = PlRefPath::new(path);
     let options = ParquetWriteOptions::default();
-    let _ = df.sink_parquet(SinkTarget::Path(path), options, None, SinkOptions::default()).unwrap();
+    let unified_sink_args = UnifiedSinkArgs {
+        mkdir: false,
+        maintain_order: true,
+        sync_on_close: SyncOnCloseType::None,
+        cloud_options: None,
+    };
+    let _ = df
+        .sink(
+            SinkDestination::File {
+                target: SinkTarget::Path(path),
+            },
+            FileWriteFormat::Parquet(Arc::new(options)),
+            unified_sink_args,
+        )
+        .unwrap();
 }
