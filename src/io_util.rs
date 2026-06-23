@@ -47,6 +47,7 @@ pub(crate) fn write_parquet_streaming(df: LazyFrame, path: &str) {
         maintain_order: true,
         sync_on_close: SyncOnCloseType::None,
         cloud_options: None,
+        sinked_paths_callback: None,
     };
     let _ = df
         .sink(

@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-polars = { version = "0.53.0", features = [
+polars = { version = "0.54.4", features = [
     "parquet",
     "lazy",
     "is_in",
@@ -17,6 +17,7 @@ polars = { version = "0.53.0", features = [
     "dtype-full",
     "random",
     "timezones",
+    "strings",
 ] }
 
 [profile.release]

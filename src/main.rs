@@ -75,7 +75,7 @@ fn main() {
         // 过滤
         .filter(col("D12").eq(lit(1)).and(col("F11").is_not_null()))
         .sort_by_exprs([col("D11"), col("D12")], SortMultipleOptions::new())
-        .with_new_streaming(true)
+        .with_streaming(true)
         .collect()
         .unwrap();
     println!("{:#?}", df);
@@ -122,7 +122,7 @@ fn str_to_len(str_val: Column) -> Column {
     str_val
         .str()
         .unwrap()
-        .into_iter()
+        .iter()
         .map(|opt_name: Option<&str>| opt_name.map(|x| x.len() as u32))
         .collect::<UInt32Chunked>()
         .into_column()
